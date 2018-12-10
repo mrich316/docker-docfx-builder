@@ -1,6 +1,7 @@
 FROM mono:5.16
 
 ENV DOCFX_VERSION=v2.40.4
+COPY docker-entrypoint.sh /
 
 RUN apt-get update \
  && apt-get -y install unzip \
@@ -12,6 +13,8 @@ RUN apt-get update \
  && unzip docfx.zip -d /opt/docfx/ \
  && rm docfx.zip \
  && apt-get -y purge unzip \
- && rm -rf /var/cache/apt/*
+ && rm -rf /var/cache/apt/* \
+ && chmod +x /docker-entrypoint.sh
 
-WORKDIR /app
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
+WORKDIR /doc
