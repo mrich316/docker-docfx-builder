@@ -16,10 +16,13 @@ case "$command" in
         mono "$DOCFX_CMD" $@
         ;;
 
-    build|dependency|download|init|merge|metadata|pdf|serve|template)
+    build|dependency|download|init|merge|metadata|pdf|template)
         mono "$DOCFX_CMD" $command $@
         ;;
 
+    serve)
+        mono "$DOCFX_CMD" $command -n "*" -p 8080 $@
+        ;;
     *)
         usage
         exit 1
