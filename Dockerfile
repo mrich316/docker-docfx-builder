@@ -1,6 +1,12 @@
-FROM mono:5.16
+FROM mono:6.10
 
-ENV DOCFX_VERSION=v2.40.7
+ARG DOCFX_VERSION=v2.56.2
+ARG DOCFX_SHA512SUM=5e265e5789178e913ce156a56f6fb42addcae1fd07058204b1fb0831a3f76d5d52dfb557e0587d69406d72a43b6458e45d59670b7a46d2ade13d99bbabfb4fec
+
+ENV \
+  DOCFX_VERSION=$DOCFX_VERSION \
+  DOCFX_SHA512SUM=$DOCFX_SHA512SUM
+
 COPY docker-entrypoint.sh /
 
 RUN apt-get update \
@@ -8,7 +14,7 @@ RUN apt-get update \
  && mkdir -p /opt/docfx \
  && curl -sSL --output docfx.zip "https://github.com/dotnet/docfx/releases/download/${DOCFX_VERSION}/docfx.zip" \
  && sha512sum docfx.zip \
- && docfx_sha512='dd00b201d0b5d4afae79618e57ad5538c53ff914dbb259bf95ee5f78818503b81444deee8cd4c57f8e811f293a54a953c7822980fdf77631a1935091d7fa96b0' \
+ && docfx_sha512=${DOCFX_SHA512SUM} \
  && echo "$docfx_sha512  docfx.zip" | sha512sum -c - \
  && unzip docfx.zip -d /opt/docfx/ \
  && rm docfx.zip \
